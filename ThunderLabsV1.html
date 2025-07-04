@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thunder Labs - AI-Powered Growth</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #06141B;
+            color: #CCD0CF;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        body.menu-open {
+            overflow: hidden;
+        }
+
+        /* Video Background */
+        .video-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+            opacity: 0.4;
+        }
+        
+        @media (max-width: 768px) {
+            .video-bg {
+                opacity: 0.2;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .video-bg {
+                display: none;
+            }
+        }
+        
+        /* Dark overlay for video */
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(6, 20, 27, 0.35);
+            z-index: -1;
+        }
+
+        /* Subtle animated background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.02;
+            background-image: 
+                radial-gradient(circle at 25% 25%, #4A5C6A 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, #253745 0%, transparent 50%);
+            background-size: 100px 100px;
+            animation: float 20s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(1deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 16px 0;
+            background: transparent;
+            backdrop-filter: none;
+            border-bottom: none;
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 60px;
+        }
+        
+        nav.scrolled {
+            background: rgba(6, 20, 27, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(74, 92, 106, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+            color: #CCD0CF;
+            text-decoration: none;
+            letter-spacing: -0.025em;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            color: #9BA8AB;
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 14px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #CCD0CF;
+        }
+        
+        /* Mobile menu toggle */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 28px;
+            height: 20px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+        }
+        
+        .mobile-menu-toggle span {
+            display: block;
+            height: 2px;
+            width: 100%;
+            background-color: #CCD0CF;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .mobile-menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .mobile-menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            padding: 0 24px;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 10;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #CCD0CF;
+            letter-spacing: -0.05em;
+            line-height: 1.1;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1.125rem, 2.5vw, 1.375rem);
+            margin-bottom: 48px;
+            color: #9BA8AB;
+            font-weight: 400;
+            line-height: 1.5;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 140px;
+            min-height: 44px;
+        }
+
+        .btn-primary {
+            background: #4A5C6A;
+            color: #CCD0CF;
+        }
+
+        .btn-primary:hover {
+            background: #253745;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #9BA8AB;
+            border: 1px solid rgba(155, 168, 171, 0.3);
+        }
+
+        .btn-secondary:hover {
+            border-color: #9BA8AB;
+            color: #CCD0CF;
+            transform: translateY(-1px);
+        }
+
+        /* Sections */
+        .section {
+            padding: 120px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section h2 {
+            font-size: clamp(2rem, 4vw, 2.5rem);
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #CCD0CF;
+            letter-spacing: -0.025em;
+        }
+
+        .section .description {
+            font-size: 18px;
+            color: #9BA8AB;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Service Tiers */
+        .tiers-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+            margin-top: 80px;
+        }
+
+        .tier-card {
+            background: linear-gradient(135deg, rgba(17, 33, 45, 0.6), rgba(37, 55, 69, 0.3));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(74, 92, 106, 0.2);
+            border-radius: 16px;
+            padding: 40px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tier-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(155, 168, 171, 0.3), transparent);
+        }
+
+        .tier-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(74, 92, 106, 0.4);
+            background: linear-gradient(135deg, rgba(17, 33, 45, 0.8), rgba(37, 55, 69, 0.4));
+        }
+
+        .tier-header {
+            margin-bottom: 32px;
+        }
+
+        .tier-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #CCD0CF;
+        }
+
+        .tier-duration {
+            font-size: 14px;
+            color: #4A5C6A;
+            font-weight: 500;
+        }
+
+        .tier-card ul {
+            list-style: none;
+            margin-bottom: 40px;
+        }
+
+        .tier-card li {
+            margin-bottom: 16px;
+            color: #9BA8AB;
+            font-size: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            line-height: 1.5;
+        }
+
+        .tier-card li::before {
+            content: '●';
+            color: #4A5C6A;
+            font-size: 8px;
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+            margin-top: 80px;
+        }
+
+        .service-card {
+            padding: 40px;
+            border-radius: 16px;
+            border: 1px solid rgba(74, 92, 106, 0.1);
+            background: rgba(17, 33, 45, 0.3);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .service-card:hover {
+            border-color: rgba(74, 92, 106, 0.3);
+            background: rgba(17, 33, 45, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .service-card h3 {
+            color: #CCD0CF;
+            margin-bottom: 16px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .service-card p {
+            color: #9BA8AB;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .services-grid,
+            .tiers-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            
+            .service-card,
+            .tier-card {
+                padding: 24px;
+            }
+        }
+
+        /* Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 48px;
+            margin-top: 64px;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #CCD0CF;
+            margin-bottom: 8px;
+        }
+
+        .stat-item p {
+            color: #9BA8AB;
+            font-size: 14px;
+        }
+
+        /* Founder Profile */
+        .founder-profile {
+            text-align: center;
+            margin-top: 64px;
+        }
+
+        .founder-photo {
+            margin-bottom: 24px;
+        }
+
+        .photo-placeholder {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(74, 92, 106, 0.3), rgba(155, 168, 171, 0.2));
+            border: 2px solid rgba(74, 92, 106, 0.3);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9BA8AB;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .photo-placeholder:hover {
+            border-color: #4A5C6A;
+        }
+
+        .founder-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #CCD0CF;
+            margin-bottom: 16px;
+        }
+        
+        /* Logo Wall */
+        .logo-wall {
+            margin-top: 80px;
+            margin-bottom: 80px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 60px 0;
+            border-radius: 16px;
+        }
+        
+        .logo-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            justify-content: center;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .logo-item {
+            width: 170px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            filter: grayscale(100%) contrast(0.8) brightness(1.5);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+        
+        .logo-item:hover {
+            filter: grayscale(0%);
+            opacity: 1;
+            transform: scale(1.05);
+        }
+        
+        /* When using actual logo images */
+        .logo-item img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: 48px;
+            object-fit: contain;
+        }
+        
+        @media (max-width: 768px) {
+            .logo-grid {
+                gap: 16px;
+            }
+            
+            .logo-item {
+                width: 100px;
+                height: 45px;
+            }
+        }
+
+        .linkedin-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .footer {
+            background: rgba(17, 33, 45, 0.5);
+            backdrop-filter: blur(20px);
+            padding: 80px 24px 40px;
+            text-align: center;
+            border-top: 1px solid rgba(74, 92, 106, 0.1);
+            margin-top: 120px;
+        }
+
+        .footer h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #CCD0CF;
+        }
+
+        .footer .description {
+            font-size: 16px;
+            color: #9BA8AB;
+            margin-bottom: 32px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-bottom {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(74, 92, 106, 0.1);
+            color: #4A5C6A;
+            font-size: 14px;
+        }
+
+        /* Mobile Breakpoints */
+        @media (max-width: 1024px) {
+            .section {
+                padding: 100px 30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: flex;
+            }
+            
+            .nav-links { 
+                display: none;
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background: rgba(6, 20, 27, 0.98);
+                flex-direction: column;
+                padding: 80px 40px;
+                gap: 24px;
+                transition: right 0.3s ease;
+                z-index: 999;
+                box-shadow: -2px 0 20px rgba(0, 0, 0, 0.5);
+            }
+            
+            .nav-links.active {
+                display: flex;
+                right: 0;
+            }
+            
+            .nav-links a {
+                font-size: 18px;
+                font-weight: 500;
+            }
+            
+            .hero h1 {
+                font-size: clamp(2rem, 8vw, 2.5rem);
+            }
+            
+            .hero .subtitle {
+                font-size: clamp(1rem, 4vw, 1.125rem);
+            }
+            
+            .section h2 {
+                font-size: clamp(1.5rem, 6vw, 2rem);
+            }
+            
+            .section .description {
+                font-size: 16px;
+            }
+            
+            .cta-buttons { 
+                flex-direction: column; 
+                align-items: center;
+                gap: 12px;
+            }
+            
+            .btn {
+                min-width: 180px;
+                padding: 14px 28px;
+                font-size: 16px;
+            }
+            
+            .section { 
+                padding: 60px 20px; 
+            }
+            
+            .nav-container { 
+                padding: 0 20px; 
+            }
+            
+            .tiers-grid,
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .service-card,
+            .tier-card {
+                padding: 24px;
+            }
+            
+            .service-card h3,
+            .tier-card h3 {
+                font-size: 18px;
+            }
+            
+            .service-card p,
+            .tier-card li {
+                font-size: 14px;
+            }
+            
+            .stats-grid {
+                gap: 32px;
+            }
+            
+            .stat-item h3 {
+                font-size: 2rem;
+            }
+            
+            .logo-wall {
+                padding: 40px 0;
+            }
+            
+            .logo-grid {
+                gap: 16px;
+                max-width: 100%;
+            }
+            
+            .logo-item {
+                width: 130px;
+                height: 55px;
+            }
+            
+            .logo-item img {
+                height: 35px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero {
+                padding: 0 16px;
+            }
+            
+            .hero h1 {
+                font-size: clamp(1.75rem, 7vw, 2rem);
+                margin-bottom: 16px;
+            }
+            
+            .hero .subtitle {
+                font-size: clamp(0.9rem, 4vw, 1rem);
+                margin-bottom: 32px;
+            }
+            
+            .section {
+                padding: 50px 16px;
+            }
+            
+            .section h2 {
+                font-size: clamp(1.375rem, 5vw, 1.5rem);
+                margin-bottom: 12px;
+            }
+            
+            .section .description {
+                font-size: 15px;
+            }
+            
+            .nav-container {
+                padding: 0 16px;
+            }
+            
+            .btn {
+                min-width: 160px;
+                padding: 12px 24px;
+                font-size: 15px;
+            }
+            
+            .service-card,
+            .tier-card {
+                padding: 20px;
+            }
+            
+            .service-card h3,
+            .tier-card h3 {
+                font-size: 17px;
+                margin-bottom: 12px;
+            }
+            
+            .service-card p,
+            .tier-card li {
+                font-size: 13px;
+                line-height: 1.5;
+            }
+            
+            .tier-card li {
+                margin-bottom: 12px;
+            }
+            
+            .stats-grid {
+                gap: 24px;
+            }
+            
+            .stat-item h3 {
+                font-size: 1.75rem;
+            }
+            
+            .stat-item p {
+                font-size: 13px;
+            }
+            
+            .footer {
+                padding: 60px 16px 30px;
+            }
+            
+            .footer h2 {
+                font-size: 1.5rem;
+            }
+            
+            .footer .description {
+                font-size: 15px;
+            }
+            
+            .logo-wall {
+                padding: 30px 0;
+            }
+            
+            .logo-grid {
+                gap: 12px;
+                max-width: 100%;
+            }
+            
+            .logo-item {
+                width: 110px;
+                height: 50px;
+            }
+            
+            .logo-item img {
+                height: 30px;
+            }
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <!-- Subtle background pattern -->
+    <div class="bg-pattern"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">Thunder Labs</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#approach">Approach</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <!-- Video Background -->
+        <video autoplay muted loop playsinline class="video-bg">
+            <source src="https://i.imgur.com/rfdJpkt.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+        
+        <div class="hero-content">
+            <h1>Unlock the value of AI for unstoppable growth</h1>
+            <p class="subtitle">AI-powered business development, sales acceleration, and growth strategy for modern businesses</p>
+            <div class="cta-buttons">
+                <a href="#services" class="btn btn-primary">Explore Solutions</a>
+                <a href="#contact" class="btn btn-secondary">Get Started</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Proposition -->
+    <section class="section" id="services">
+        <div class="section-header">
+            <h2>Built for modern businesses</h2>
+            <p class="description">We combine deep advertising expertise with cutting-edge AI to deliver tools and strategies that drive real results.</p>
+        </div>
+        
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>Upskill Growth Teams with AI</h3>
+                <p>Strategic AI assessment to help C-suite leaders exponentially increase organizational performance. Identify high-impact opportunities and create implementation roadmaps that deliver measurable results.</p>
+            </div>
+            <div class="service-card">
+                <h3>Foster Adoption of AI Tools</h3>
+                <p>Hands-on deployment of AI solutions with your teams to ensure successful adoption. From custom applications to process automation - we build, train, and optimize for real-world results.</p>
+            </div>
+            <div class="service-card">
+                <h3>Fractional CGO Services</h3>
+                <p>Strategic growth leadership backed by 10+ years closing enterprise deals with the world's biggest brands. Hands-on expertise in sales strategy, team development, and revenue acceleration - enhanced with AI where it adds value.</p>
+            </div>
+            <div class="service-card">
+                <h3>International Market Expansion</h3>
+                <p>Expert guidance for European businesses expanding into the US or American companies entering European markets. Navigate cultural nuances and expand growth meaningfully on the first try using proven strategies.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Approach/Tiers -->
+    <section class="section" id="approach">
+        <div class="section-header">
+            <h2>How we work with you</h2>
+            <p class="description">Flexible engagement models designed to meet you wherever you are in your AI journey.</p>
+        </div>
+        
+        <div class="tiers-grid">
+            <div class="tier-card">
+                <div class="tier-header">
+                    <h3>AI Training for Growth Teams</h3>
+                    <div class="tier-duration">1-4 weeks</div>
+                </div>
+                <ul>
+                    <li>Hands-on AI training and prompt literacy for your teams</li>
+                    <li>All activities using your tools and tailored to your processes</li>
+                    <li>Sales-focused AI implementation and optimization</li>
+                    <li>Custom workflow integration and adoption support</li>
+                </ul>
+                <a href="#contact" class="btn btn-primary">Book Now</a>
+            </div>
+            
+            <div class="tier-card">
+                <div class="tier-header">
+                    <h3>Pitch & Proposal Support</h3>
+                    <div class="tier-duration">3-4 weeks</div>
+                </div>
+                <ul>
+                    <li>High-stakes pitch development and strategy</li>
+                    <li>Presentation optimization and rehearsal</li>
+                    <li>Competitive positioning and messaging</li>
+                    <li>Hands-on support through the process</li>
+                </ul>
+                <a href="#contact" class="btn btn-primary">Book Now</a>
+            </div>
+            
+            <div class="tier-card">
+                <div class="tier-header">
+                    <h3>Fractional Chief Growth Officer</h3>
+                    <div class="tier-duration">6-month increments</div>
+                </div>
+                <ul>
+                    <li>Fractional CGO leadership and strategy</li>
+                    <li>Ongoing sales acceleration and team development</li>
+                    <li>Continuous AI enhancement and optimization</li>
+                    <li>Regular strategic reviews and pivots</li>
+                </ul>
+                <a href="#contact" class="btn btn-primary">Book Now</a>
+            </div>
+            
+            <div class="tier-card">
+                <div class="tier-header">
+                    <h3>Market Expansion Projects</h3>
+                    <div class="tier-duration">Timeline varies by scope</div>
+                </div>
+                <ul>
+                    <li>International market entry strategy</li>
+                    <li>Cultural adaptation and regulatory navigation</li>
+                    <li>Go-to-market execution for new territories</li>
+                    <li>Custom approach based on market complexity</li>
+                </ul>
+                <a href="#contact" class="btn btn-primary">Book Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section class="section" id="about">
+        <div class="section-header">
+            <h2>Experience meets innovation</h2>
+            <p class="description">10+ years' enterprise sales and leadership experience, selling into the world's largest brands. Deep expertise navigating complex international partnerships and bridging the global/local divide with $50M+ revenue closed to date.</p>
+        </div>
+        
+        <!-- Logo Wall -->
+        <div class="logo-wall">
+            <div class="logo-grid">
+                <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/P%26G_logo.png" alt="P&G"></div>
+                <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/sco/thumb/e/e4/Unilever.svg/929px-Unilever.svg.png" alt="Unilever"></div>
+                <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/1280px-Coca-Cola_logo.svg.png" alt="Coca-Cola"></div>
+                <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/PepsiCo_logo.svg/1280px-PepsiCo_logo.svg.png" alt="PepsiCo"></div>
+                <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/d/d8/Nestl%C3%A9.svg/800px-Nestl%C3%A9.svg.png" alt="Nestlé"></div>
+                <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Mondelez_international_2012_logo.svg/1280px-Mondelez_international_2012_logo.svg.png" alt="Mondelez"></div>
+                <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1024px-Netflix_2015_logo.svg.png" alt="Netflix"></div>
+                <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1024px-Google_2015_logo.svg.png" alt="Google"></div>
+                <div class="logo-item"><img src="https://brandlogos.net/wp-content/uploads/2021/10/meta_platforms_icon-logo_brandlogos.net_f5zqr.png" alt="Meta"></div>
+                <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/1024px-Amazon_logo.svg.png" alt="Amazon"></div>
+                <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/833px-Apple_logo_black.svg.png" alt="Apple"></div>
+                <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Uber_logo_2018.svg/1024px-Uber_logo_2018.svg.png" alt="Uber"></div>
+                <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/L%27Or%C3%A9al_logo.svg/1280px-L%27Or%C3%A9al_logo.svg.png" alt="L'Oreal"></div>
+                <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/1024px-Starbucks_Corporation_Logo_2011.svg.png" alt="Starbucks"></div>
+                <div class="logo-item">Shell</div>
+                <div class="logo-item">Heineken</div>
+                <div class="logo-item">Mars</div>
+                <div class="logo-item">General Mills</div>
+                <div class="logo-item">Adobe</div>
+                <div class="logo-item">Vodafone</div>
+                <div class="logo-item">J&J</div>
+                <div class="logo-item">Booking.com</div>
+                <div class="logo-item">Sony Interactive</div>
+                <div class="logo-item">Zurich Insurance</div>
+                <div class="logo-item">H&M</div>
+                <div class="logo-item">Puma</div>
+                <div class="logo-item">Expedia</div>
+                <div class="logo-item">Etsy</div>
+                <div class="logo-item">EA Games</div>
+                <div class="logo-item">Kenvue</div>
+                <div class="logo-item">Reckitt</div>
+                <div class="logo-item">Danone</div>
+                <div class="logo-item">McLaren Automotive</div>
+                <div class="logo-item">Beiersdorf</div>
+                <div class="logo-item">COTY</div>
+                <div class="logo-item">Decathlon</div>
+                <div class="logo-item">Miele</div>
+                <div class="logo-item">TTI</div>
+                <div class="logo-item">Ryobi</div>
+                <div class="logo-item">FrieslandCampina</div>
+                <div class="logo-item">Kellanova</div>
+                <div class="logo-item">Jacobs Douwe Egberts</div>
+                <div class="logo-item">Chenot Group</div>
+                <div class="logo-item">Plaion</div>
+                <div class="logo-item">Keywords Studios</div>
+                <div class="logo-item">Curve Games</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <h2>Ready to accelerate growth?</h2>
+        <p class="description">Let's explore how AI can transform your business. Get in touch to start the conversation.</p>
+        <div class="cta-buttons">
+            <a href="mailto:hello@thunderlabs.com" class="btn btn-primary">Get Started</a>
+            <a href="#" class="btn btn-secondary">Book a Call</a>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Thunder Labs. Built for growth.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        const body = document.body;
+        
+        mobileMenuToggle.addEventListener('click', function() {
+            this.classList.toggle('active');
+            navLinks.classList.toggle('active');
+            body.classList.toggle('menu-open');
+        });
+        
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenuToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+                body.classList.remove('menu-open');
+            });
+        });
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Simple scroll effect for nav
+        let lastScrollY = window.scrollY;
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
